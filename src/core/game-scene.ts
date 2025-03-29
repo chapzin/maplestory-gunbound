@@ -92,7 +92,7 @@ export class GameScene extends BaseScene {
     this.errorLog.push({
       component,
       message,
-      error,
+      error: error || new Error("Erro não especificado"),
       timestamp: new Date()
     });
     

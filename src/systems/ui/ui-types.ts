@@ -22,7 +22,7 @@ export enum UIEventType {
 export interface UIElement {
   id: string;
   displayObject: PIXI.DisplayObject;
-  update(delta: number): void;
+  update(delta: number, value?: any): void;
   setVisible(visible: boolean): void;
   isVisible(): boolean;
   setPosition(x: number, y: number): void;
