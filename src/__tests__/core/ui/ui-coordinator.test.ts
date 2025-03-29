@@ -9,6 +9,24 @@ jest.mock('pixi.js', () => ({
   Container: jest.fn().mockImplementation(() => ({
     addChild: jest.fn(),
     removeChild: jest.fn()
+  })),
+  Graphics: jest.fn().mockImplementation(() => ({
+    beginFill: jest.fn().mockReturnThis(),
+    drawRect: jest.fn().mockReturnThis(),
+    endFill: jest.fn().mockReturnThis(),
+    position: {
+      set: jest.fn()
+    },
+    width: 400,
+    height: 400
+  })),
+  Text: jest.fn().mockImplementation(() => ({
+    position: {
+      set: jest.fn()
+    },
+    width: 100,
+    height: 20,
+    text: "mockText"
   }))
 }));
 
@@ -19,7 +37,29 @@ jest.mock('../../../core/ui', () => {
       addButton: jest.fn(),
       addText: jest.fn(),
       update: jest.fn(),
-      clear: jest.fn()
+      clear: jest.fn(),
+      createText: jest.fn().mockImplementation(() => ({
+        id: 'mockText',
+        displayObject: { text: 'mockText' },
+        setVisible: jest.fn(),
+        setPosition: jest.fn(),
+        setText: jest.fn()
+      })),
+      createButton: jest.fn().mockImplementation(() => ({
+        id: 'mockButton',
+        displayObject: {},
+        setVisible: jest.fn(),
+        setCallback: jest.fn()
+      })),
+      createProgressBar: jest.fn().mockImplementation(() => ({
+        id: 'mockProgressBar',
+        displayObject: {},
+        setVisible: jest.fn(),
+        setValue: jest.fn()
+      })),
+      container: {
+        addChild: jest.fn()
+      }
     }))
   };
 });
@@ -39,7 +79,20 @@ jest.mock('../../../ui/game-ui', () => {
         (this as any).storedRestartCallback = callback;
       }),
       hideGameOver: jest.fn(),
-      showFloatingText: jest.fn()
+      showFloatingText: jest.fn(),
+      clear: jest.fn()
+    }))
+  };
+});
+
+// Mock da classe BenchmarkUI
+jest.mock('../../../ui/benchmark', () => {
+  return {
+    BenchmarkUI: jest.fn().mockImplementation(() => ({
+      show: jest.fn(),
+      hide: jest.fn(),
+      toggle: jest.fn(),
+      destroy: jest.fn()
     }))
   };
 });
@@ -284,16 +337,16 @@ describe('UICoordinator', () => {
   });
   
   test('dispose deve limpar recursos e resetar o estado', () => {
-    // Acessar a instância real do UISystem
-    const uiSystem = (uiCoordinator as any).uiSystem;
+    // Acessar a instância real do GameUI e UISystem
+    const gameUI = (uiCoordinator as any).gameUI;
     
-    // Spy no método
-    const clearSpy = jest.spyOn(uiSystem, 'clear');
+    // Spy nos métodos
+    const gameUIClearSpy = jest.spyOn(gameUI, 'clear');
     
     uiCoordinator.dispose();
     
     // Verificar chamadas
-    expect(clearSpy).toHaveBeenCalled();
+    expect(gameUIClearSpy).toHaveBeenCalled();
     expect(removeAllListenersSpy).toHaveBeenCalled();
     
     // Verificar estado

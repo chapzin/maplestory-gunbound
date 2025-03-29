@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { UISystem } from '../ui';
 import { GameUI } from '../../ui/game-ui';
-import { BenchmarkUI } from '../../ui/benchmark-ui';
+import { BenchmarkUI } from '../../ui/benchmark';
 import { EventEmitter, EventCallback } from '../../utils/event-emitter';
 
 /**
