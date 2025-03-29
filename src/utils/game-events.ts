@@ -183,7 +183,10 @@ export interface BenchmarkPayload extends GameEventPayload {
   averageFps?: number;
   minFps?: number;
   maxFps?: number;
+  targetFps?: number;
   averageRenderTime?: number;
+  averageMemoryUsage?: number;
+  comparisonPercent?: number;
 }
 
 /**

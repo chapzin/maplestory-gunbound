@@ -1,19 +1,25 @@
 import * as PIXI from 'pixi.js';
 import { PhysicsEngine, PhysicsObject } from './physics/index';
 import { CONFIG } from '../core/config';
+import { Physics } from './physics'; // Importar a classe Physics para compatibilidade
 
 /**
  * Sistema de física para trajetórias e colisões
  * Adapta o sistema de física genérico para as necessidades específicas do jogo
+ * Estende a classe Physics para compatibilidade com código existente
  */
-export class PhysicsSystem {
+export class PhysicsSystem extends Physics {
   private engine: PhysicsEngine;
   private wind: number = 0;
   private gravity: number = CONFIG.PHYSICS.GRAVITY;
   private windUpdateInterval: number = 5000; // 5 segundos
   private windTimer: number = 0;
+  
+  // Propriedades necessárias para compatibilidade com Physics
+  objects: PhysicsObject[] = [];
 
   constructor() {
+    super(); // Chama o construtor da classe pai
     this.engine = new PhysicsEngine();
     this.updateWind();
   }
@@ -23,6 +29,10 @@ export class PhysicsSystem {
    * @param deltaTime Tempo desde o último frame
    */
   public update(deltaTime: number): void {
+    // Chama o método update da classe pai para manter compatibilidade
+    super.update(deltaTime);
+    
+    // Atualiza o sistema de física avançado
     this.engine.update(deltaTime);
     
     // Atualiza o vento periodicamente
@@ -31,6 +41,31 @@ export class PhysicsSystem {
       this.updateWind();
       this.windTimer = 0;
     }
+  }
+
+  // Implementações necessárias para compatibilidade com Physics
+  checkCollisions(): void {
+    // Já implementado internamente pelo engine
+  }
+
+  resolveCollision(objectA: PhysicsObject, objectB: PhysicsObject): void {
+    // Delegado para o engine, que já implementa resolução de colisões
+  }
+
+  adjustPositionAgainstStatic(movable: PhysicsObject, staticObj: PhysicsObject): void {
+    // Implementado internamente pelo engine
+  }
+
+  bounceAgainstStatic(movable: PhysicsObject, staticObj: PhysicsObject): void {
+    // Implementado internamente pelo engine
+  }
+
+  elasticCollision(objectA: PhysicsObject, objectB: PhysicsObject): void {
+    // Implementado internamente pelo engine
+  }
+
+  adjustPositionAfterCollision(objectA: PhysicsObject, objectB: PhysicsObject): void {
+    // Implementado internamente pelo engine
   }
 
   /**
@@ -117,6 +152,10 @@ export class PhysicsSystem {
    * @param object Objeto a ser adicionado
    */
   public addObject(object: PhysicsObject): void {
+    // Adiciona ao sistema de física pai para compatibilidade
+    super.addObject(object);
+    
+    // Adiciona ao engine avançado
     this.engine.addObject(object);
   }
   
@@ -125,6 +164,10 @@ export class PhysicsSystem {
    * @param object Objeto a ser removido
    */
   public removeObject(object: PhysicsObject): void {
+    // Remove do sistema de física pai para compatibilidade
+    super.removeObject(object);
+    
+    // Remove do engine avançado
     this.engine.removeObject(object);
   }
   
@@ -132,6 +175,10 @@ export class PhysicsSystem {
    * Limpa todos os objetos do sistema de física
    */
   public clear(): void {
+    // Limpa o sistema de física pai para compatibilidade
+    super.clear();
+    
+    // Limpa o engine avançado
     this.engine.clear();
   }
   
@@ -142,6 +189,7 @@ export class PhysicsSystem {
    * @returns Verdadeiro se há colisão
    */
   public checkCollision(objectA: PhysicsObject, objectB: PhysicsObject): boolean {
+    // Prioriza o engine avançado para verificação de colisão
     return this.engine.checkCollision(objectA, objectB);
   }
 
@@ -152,6 +200,10 @@ export class PhysicsSystem {
    * @param forceY Componente Y da força
    */
   public applyForce(object: PhysicsObject, forceX: number, forceY: number): void {
+    // Aplica força no sistema de física pai para compatibilidade
+    super.applyForce(object, forceX, forceY);
+    
+    // Aplica força no engine avançado
     this.engine.applyForce(object, forceX, forceY);
   }
   
@@ -163,6 +215,7 @@ export class PhysicsSystem {
    * @returns Verdadeiro se o ponto está dentro do objeto
    */
   public isPointInObject(x: number, y: number, object: PhysicsObject): boolean {
+    // Prioriza o engine avançado para verificação de ponto
     return this.engine.isPointInObject(x, y, object);
   }
   
@@ -182,5 +235,9 @@ export class PhysicsSystem {
    */
   public applyImpulse(object: PhysicsObject, impulseX: number, impulseY: number): void {
     this.engine.applyImpulse(object, impulseX, impulseY);
+    
+    // Atualiza a velocidade no objeto para compatibilidade com o sistema de física pai
+    object.velocityX += impulseX / object.mass;
+    object.velocityY += impulseY / object.mass;
   }
 } 

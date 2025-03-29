@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Terrain } from '../systems/terrain';
-import { Physics } from '../systems/physics';
+import { PhysicsService } from '../systems/physics-service';
 import { VehicleManager } from '../entities/vehicle-manager';
 import { TurnSystem } from '../systems/turn-system';
 import { ProjectileManager } from '../systems/projectile-manager';
@@ -43,7 +43,7 @@ export class GameScene extends BaseScene {
   
   // Sistemas existentes que ainda são gerenciados pela GameScene
   private gameStateManager: GameStateManager;
-  private physics: Physics;
+  private physicsService: PhysicsService;
   private terrain: Terrain;
   private vehicleManager: VehicleManager;
   private projectileManager: ProjectileManager;
@@ -129,8 +129,8 @@ export class GameScene extends BaseScene {
       await this.audioController.initialize();
       // Nota: Não reproduzimos a música aqui ainda, apenas após todos os sistemas estarem inicializados
       
-      // Criar e inicializar o sistema de física
-      this.physics = new Physics();
+      // Obter a instância do serviço de física
+      this.physicsService = PhysicsService.getInstance();
       
       // Criar e inicializar o sistema de terreno
       this.terrain = new Terrain(
@@ -141,13 +141,13 @@ export class GameScene extends BaseScene {
       // Criar e inicializar o gerenciador de veículos
       this.vehicleManager = new VehicleManager(
         this.renderer.getContainer(ContainerType.VEHICLE),
-        this.physics
+        this.physicsService.getPhysicsSystem()
       );
       
       // Criar e inicializar o gerenciador de projéteis
       this.projectileManager = new ProjectileManager(
         this.renderer.getContainer(ContainerType.PROJECTILE),
-        this.physics,
+        this.physicsService.getPhysicsSystem(),
         this.terrain,
         this.app.screen.width,
         this.app.screen.height
@@ -193,7 +193,7 @@ export class GameScene extends BaseScene {
         projectileManager: this.projectileManager,
         turnSystem: this.turnSystem,
         aimingSystem: this.aimingSystem,
-        physics: this.physics,
+        physics: this.physicsService.getPhysicsSystem(),
         terrain: this.terrain
       };
       
@@ -211,7 +211,7 @@ export class GameScene extends BaseScene {
         this.projectileManager,
         this.turnSystem,
         this.aimingSystem,
-        this.physics,
+        this.physicsService.getPhysicsSystem(),
         this.terrain,
         this.eventCoordinator
       );
@@ -357,7 +357,7 @@ export class GameScene extends BaseScene {
       }
       
       // Atualizar os sistemas principais
-      this.physics.update(deltaTime);
+      this.physicsService.update(deltaTime);
       this.inputHandler.update(deltaTime);
       this.projectileManager.update(deltaTime);
       this.vehicleManager.update(deltaTime);
