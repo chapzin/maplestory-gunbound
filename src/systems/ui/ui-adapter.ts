@@ -71,9 +71,9 @@ export class UIAdapter {
   }
   
   /**
-   * Cria e adiciona um elemento de texto
+   * Cria e adiciona um texto
    * @param id ID do elemento
-   * @param text Texto inicial
+   * @param text Texto
    * @param x Posição X
    * @param y Posição Y
    * @param style Estilo do texto
@@ -86,7 +86,7 @@ export class UIAdapter {
     y: number, 
     style?: Partial<PIXI.TextStyle>
   ): TextElement {
-    return this.uiSystem.createText(id, text, x, y, style) as TextElement;
+    return this.uiSystem.createText(id, text, x, y, style) as unknown as TextElement;
   }
   
   /**
@@ -117,7 +117,7 @@ export class UIAdapter {
       textStyle: style || {}
     };
     
-    return this.uiSystem.getFactory().createButton(id, text, x, y, options, onClick) as ButtonElement;
+    return this.uiSystem.getFactory().createButton(id, text, x, y, options, onClick) as unknown as ButtonElement;
   }
   
   /**
@@ -153,7 +153,7 @@ export class UIAdapter {
       fillColor
     };
     
-    return this.uiSystem.getFactory().createProgressBar(id, x, y, options) as ProgressBarElement;
+    return this.uiSystem.getFactory().createProgressBar(id, x, y, options) as unknown as ProgressBarElement;
   }
   
   /**
@@ -186,7 +186,7 @@ export class UIAdapter {
       borderWidth
     };
     
-    return this.uiSystem.getFactory().createPanel(id, x, y, options) as PanelElement;
+    return this.uiSystem.getFactory().createPanel(id, x, y, options) as unknown as PanelElement;
   }
   
   /**
@@ -245,15 +245,15 @@ export class UIAdapter {
       this.uiSystem.getBinding().bind<string>(
         element, 
         path,
-        (el, value) => (el as TextElement).setText(value),
-        (el) => (el as TextElement).getText()
+        (el, value) => (el as unknown as TextElement).setText(value),
+        (el) => (el as unknown as TextElement).getText()
       );
     } else if (element instanceof ProgressBarElement) {
       this.uiSystem.getBinding().bind<number>(
         element,
         path,
-        (el, value) => (el as ProgressBarElement).setValue(value),
-        (el) => (el as ProgressBarElement).getValue()
+        (el, value) => (el as unknown as ProgressBarElement).setValue(value),
+        (el) => (el as unknown as ProgressBarElement).getValue()
       );
     }
     // Adicione mais tipos conforme necessário

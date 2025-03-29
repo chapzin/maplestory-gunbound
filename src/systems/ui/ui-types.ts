@@ -57,6 +57,9 @@ export interface UIButtonEventData extends UIElementEventData {
   originalEvent?: MouseEvent | TouchEvent;
 }
 
+// Alias para manter compatibilidade com o código existente
+export type UIButtonClickedEventData = UIButtonEventData;
+
 /**
  * Tipo para estilos de texto
  */
@@ -74,6 +77,7 @@ export interface ButtonOptions {
   backgroundAlpha?: number;
   hoverColor?: number;
   disabledColor?: number;
+  pressColor?: number;     // Cor quando o botão é pressionado
   textColor?: number;
   textStyle?: TextStyle;
   cornerRadius?: number;
@@ -106,6 +110,8 @@ export interface PanelOptions {
   borderColor?: number;
   borderWidth?: number;
   cornerRadius?: number;
+  padding?: number;        // Espaçamento interno do painel
+  alpha?: number;          // Transparência geral (para compatibilidade com código existente)
 }
 
 /**

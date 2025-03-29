@@ -34,7 +34,7 @@ export class UIFactory implements IUIFactory {
    * @returns Elemento de texto
    */
   createText(id: string, text: string, x: number, y: number, style?: TextStyle): UIElement {
-    return new TextElement(id, text, style || {}, x, y);
+    return new TextElement(id, text, style || {}, x, y) as UIElement;
   }
   
   /**
@@ -48,7 +48,7 @@ export class UIFactory implements IUIFactory {
    * @returns Elemento de botão
    */
   createButton(id: string, text: string, x: number, y: number, options: ButtonOptions, onClick: () => void): UIElement {
-    return new ButtonElement(id, text, x, y, options, onClick, this.eventEmitter);
+    return new ButtonElement(id, text, x, y, options, onClick, this.eventEmitter) as UIElement;
   }
   
   /**
@@ -60,7 +60,7 @@ export class UIFactory implements IUIFactory {
    * @returns Elemento de barra de progresso
    */
   createProgressBar(id: string, x: number, y: number, options: ProgressBarOptions): UIElement {
-    return new ProgressBarElement(id, x, y, options, this.eventEmitter);
+    return new ProgressBarElement(id, x, y, options, this.eventEmitter) as UIElement;
   }
   
   /**
@@ -72,7 +72,7 @@ export class UIFactory implements IUIFactory {
    * @returns Elemento de painel
    */
   createPanel(id: string, x: number, y: number, options: PanelOptions): UIElement {
-    return new PanelElement(id, x, y, options);
+    return new PanelElement(id, x, y, options) as UIElement;
   }
   
   /**
@@ -84,7 +84,7 @@ export class UIFactory implements IUIFactory {
    * @returns Elemento de barra com rótulo
    */
   createLabeledBar(id: string, x: number, y: number, options: LabeledBarOptions): UIElement {
-    return new LabeledBarElement(id, x, y, options, this.eventEmitter);
+    return new LabeledBarElement(id, x, y, options, this.eventEmitter) as UIElement;
   }
   
   /**
@@ -121,7 +121,7 @@ export class UIFactory implements IUIFactory {
       showValue: true
     };
     
-    return this.createLabeledBar(id, x, y, options);
+    return this.createLabeledBar(id, x, y, options) as UIElement;
   }
   
   /**
@@ -133,7 +133,7 @@ export class UIFactory implements IUIFactory {
    * @returns Elemento de grade
    */
   createGrid(id: string, x: number, y: number, options: GridOptions): UIElement {
-    return new GridElement(id, x, y, options);
+    return new GridElement(id, x, y, options) as UIElement;
   }
   
   /**
@@ -166,7 +166,7 @@ export class UIFactory implements IUIFactory {
       showGrid
     };
     
-    return this.createGrid(id, x, y, options);
+    return this.createGrid(id, x, y, options) as UIElement;
   }
   
   /**
@@ -179,7 +179,7 @@ export class UIFactory implements IUIFactory {
    * @returns Elemento de ícone
    */
   createIcon(id: string, texture: PIXI.Texture | string, x: number, y: number, options?: IconOptions): UIElement {
-    return new IconElement(id, texture, x, y, options);
+    return new IconElement(id, texture, x, y, options) as UIElement;
   }
   
   /**
