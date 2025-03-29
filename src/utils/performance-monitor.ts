@@ -27,7 +27,19 @@ export interface PerformanceReport {
   maxFps: number;
   averageRenderTime: number;
   averageMemoryUsage: number;
-  timestamp: string;
+  timestamp: number;
+}
+
+/**
+ * Interface que estende Performance para incluir a propriedade memory
+ * Esta é uma extensão não padrão disponível apenas no Chrome
+ */
+interface ExtendedPerformance extends Performance {
+  memory?: {
+    usedJSHeapSize: number;
+    totalJSHeapSize: number;
+    jsHeapSizeLimit: number;
+  };
 }
 
 /**
@@ -119,7 +131,7 @@ export class PerformanceMonitor {
       maxFps: metric.maxFps,
       averageRenderTime: metric.averageRenderTime,
       averageMemoryUsage: metric.averageMemoryUsage,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().getTime()
     };
     
     // Reseta o estado
@@ -152,9 +164,9 @@ export class PerformanceMonitor {
     this.renderTimes.push(renderTime);
     
     // Tenta obter informações de memória, se disponíveis
-    if (typeof performance.memory !== 'undefined') {
-      // @ts-ignore: Property 'memory' does not exist on type 'Performance'
-      const memUsage = performance.memory.usedJSHeapSize / (1024 * 1024); // em MB
+    const extendedPerformance = performance as ExtendedPerformance;
+    if (extendedPerformance.memory) {
+      const memUsage = extendedPerformance.memory.usedJSHeapSize / (1024 * 1024); // em MB
       this.memoryUsages.push(memUsage);
     } else {
       // Usa um valor dummy para navegadores que não suportam
@@ -192,7 +204,7 @@ export class PerformanceMonitor {
         maxFps: metric.maxFps,
         averageRenderTime: metric.averageRenderTime,
         averageMemoryUsage: metric.averageMemoryUsage,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().getTime()
       });
     });
     
