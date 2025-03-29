@@ -1,7 +1,7 @@
 import { BenchmarkSystem, BenchmarkConfig, BenchmarkResult } from '../../systems/benchmark-system';
 import { IBenchmarkService } from './benchmark-interfaces';
 import { EventCoordinator } from '../../core/event-coordinator';
-import { GameEventType } from '../../utils/game-events';
+import { GameEventType, BenchmarkPayload } from '../../utils/game-events';
 
 /**
  * Implementação do serviço de benchmark
@@ -25,18 +25,21 @@ export class BenchmarkService implements IBenchmarkService {
     
     // Configurar listener para eventos de benchmark
     this.eventCoordinator.on(GameEventType.PERFORMANCE_REPORT, (data) => {
+      // Cast para o tipo BenchmarkPayload para acessar as propriedades específicas
+      const benchmarkData = data as BenchmarkPayload;
+      
       const result: BenchmarkResult = {
         timestamp: data.timestamp,
-        scenario: data.scenarioName,
-        duration: data.duration,
-        averageFps: data.averageFps,
-        minFps: data.minFps,
-        maxFps: data.maxFps,
-        targetFps: data.targetFps,
-        renderTime: data.averageRenderTime,
-        memoryUsage: data.averageMemoryUsage,
+        scenario: benchmarkData.scenarioName,
+        duration: benchmarkData.duration,
+        averageFps: benchmarkData.averageFps,
+        minFps: benchmarkData.minFps,
+        maxFps: benchmarkData.maxFps,
+        targetFps: benchmarkData.targetFps,
+        renderTime: benchmarkData.averageRenderTime,
+        memoryUsage: benchmarkData.averageMemoryUsage,
         success: true,
-        comparisonPercent: data.comparisonPercent
+        comparisonPercent: benchmarkData.comparisonPercent
       };
       
       // Adicionar ao histórico

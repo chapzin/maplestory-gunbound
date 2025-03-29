@@ -15,9 +15,6 @@ export class PhysicsSystem extends Physics {
   private windUpdateInterval: number = 5000; // 5 segundos
   private windTimer: number = 0;
   
-  // Propriedades necessárias para compatibilidade com Physics
-  objects: PhysicsObject[] = [];
-
   constructor() {
     super(); // Chama o construtor da classe pai
     this.engine = new PhysicsEngine();

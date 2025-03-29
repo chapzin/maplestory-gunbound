@@ -23,7 +23,7 @@ export interface PhysicsObject {
  * Responsável por simular a física básica para os objetos do jogo
  */
 export class Physics {
-  private objects: PhysicsObject[] = [];
+  protected objects: PhysicsObject[] = [];
   
   /**
    * Adiciona um objeto ao sistema de física
@@ -75,7 +75,7 @@ export class Physics {
   /**
    * Verifica e resolve colisões entre objetos
    */
-  private checkCollisions(): void {
+  protected checkCollisions(): void {
     const length = this.objects.length;
     
     // Verifica cada par de objetos
@@ -119,7 +119,7 @@ export class Physics {
    * @param objectA Primeiro objeto
    * @param objectB Segundo objeto
    */
-  private resolveCollision(objectA: PhysicsObject, objectB: PhysicsObject): void {
+  protected resolveCollision(objectA: PhysicsObject, objectB: PhysicsObject): void {
     // Se objectB é estático, apenas ajusta objectA
     if (objectB.isStatic) {
       this.adjustPositionAgainstStatic(objectA, objectB);
@@ -143,7 +143,7 @@ export class Physics {
    * @param movable Objeto móvel
    * @param staticObj Objeto estático
    */
-  private adjustPositionAgainstStatic(movable: PhysicsObject, staticObj: PhysicsObject): void {
+  protected adjustPositionAgainstStatic(movable: PhysicsObject, staticObj: PhysicsObject): void {
     // Calcula a sobreposição em cada eixo
     const overlapX = Math.min(
       movable.x + movable.width - staticObj.x,
@@ -178,7 +178,7 @@ export class Physics {
    * @param movable Objeto móvel
    * @param staticObj Objeto estático
    */
-  private bounceAgainstStatic(movable: PhysicsObject, staticObj: PhysicsObject): void {
+  protected bounceAgainstStatic(movable: PhysicsObject, staticObj: PhysicsObject): void {
     // Determina em qual eixo ocorreu a colisão
     const centerDiffX = (movable.x + movable.width / 2) - (staticObj.x + staticObj.width / 2);
     const centerDiffY = (movable.y + movable.height / 2) - (staticObj.y + staticObj.height / 2);
@@ -209,7 +209,7 @@ export class Physics {
    * @param objectA Primeiro objeto
    * @param objectB Segundo objeto
    */
-  private elasticCollision(objectA: PhysicsObject, objectB: PhysicsObject): void {
+  protected elasticCollision(objectA: PhysicsObject, objectB: PhysicsObject): void {
     // Calcula as velocidades após a colisão
     const massSum = objectA.mass + objectB.mass;
     
@@ -245,7 +245,7 @@ export class Physics {
    * @param objectA Primeiro objeto
    * @param objectB Segundo objeto
    */
-  private adjustPositionAfterCollision(objectA: PhysicsObject, objectB: PhysicsObject): void {
+  protected adjustPositionAfterCollision(objectA: PhysicsObject, objectB: PhysicsObject): void {
     // Calcula o vetor entre os centros dos objetos
     const centerAX = objectA.x + objectA.width / 2;
     const centerAY = objectA.y + objectA.height / 2;
