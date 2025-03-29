@@ -36,7 +36,7 @@ export class GameScene extends BaseScene {
     
     // Inicializa sistemas
     this.physicsSystem = new PhysicsSystem();
-    this.terrainSystem = new TerrainSystem(app);
+    this.terrainSystem = new TerrainSystem(app.stage, app.renderer);
     this.inputSystem = new InputSystem(app);
     this.explosionEffect = new ExplosionEffect(this.container);
     this.eventSystem = EventSystem.getInstance();
