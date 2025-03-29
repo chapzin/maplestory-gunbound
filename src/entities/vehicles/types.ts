@@ -18,6 +18,9 @@ export enum VehicleType {
   TURTLE = 'turtle',
   BOAR = 'boar',
   KNIGHT = 'knight',
+  INTERCEPTOR = 'interceptor',
+  DEVASTATOR = 'devastator',
+  DEFENDER = 'defender',
 }
 
 /**
@@ -29,6 +32,9 @@ export enum WeaponType {
   MISSILE = 'missile',
   BOMB = 'bomb',
   FIRE = 'fire',
+  GUIDED_MISSILE = 'guided_missile',
+  FRAG_BOMB = 'frag_bomb',
+  FORCE_FIELD = 'force_field',
 }
 
 /**
