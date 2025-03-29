@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { UISystem } from '../ui';
 import { GameUI } from '../../ui/game-ui';
+import { BenchmarkUI } from '../../ui/benchmark-ui';
 import { EventEmitter, EventCallback } from '../../utils/event-emitter';
 
 /**
@@ -10,7 +11,9 @@ export enum UIEventType {
   UI_ELEMENT_CREATED = 'ui_element_created',
   UI_ELEMENT_UPDATED = 'ui_element_updated',
   UI_ELEMENT_REMOVED = 'ui_element_removed',
-  BUTTON_CLICKED = 'button_clicked'
+  BUTTON_CLICKED = 'button_clicked',
+  BENCHMARK_OPENED = 'benchmark_opened',
+  BENCHMARK_CLOSED = 'benchmark_closed'
 }
 
 /**
@@ -91,6 +94,27 @@ export interface IUICoordinator {
   update(delta: number): void;
   
   /**
+   * Mostra a interface de benchmark
+   */
+  showBenchmarkUI(): void;
+  
+  /**
+   * Esconde a interface de benchmark
+   */
+  hideBenchmarkUI(): void;
+  
+  /**
+   * Alterna a visibilidade da interface de benchmark
+   */
+  toggleBenchmarkUI(): void;
+  
+  /**
+   * Define o callback do botão de benchmark
+   * @param callback Função a ser chamada quando o botão for clicado
+   */
+  setBenchmarkButtonCallback(callback: () => void): void;
+  
+  /**
    * Libera recursos do coordenador de UI
    */
   dispose(): void;
@@ -102,6 +126,7 @@ export interface IUICoordinator {
 export class UICoordinator implements IUICoordinator {
   private uiSystem: UISystem;
   private gameUI: GameUI;
+  private benchmarkUI?: BenchmarkUI;
   private eventEmitter: EventEmitter = new EventEmitter();
   private initialized: boolean = false;
   
@@ -116,6 +141,9 @@ export class UICoordinator implements IUICoordinator {
     
     this.uiSystem = new UISystem(container);
     this.gameUI = new GameUI(this.uiSystem, width, height);
+    
+    // Inicializa a interface de benchmark
+    this.benchmarkUI = new BenchmarkUI(this.uiSystem, width, height);
     
     this.initialized = true;
   }
@@ -268,14 +296,74 @@ export class UICoordinator implements IUICoordinator {
   }
   
   /**
+   * Mostra a interface de benchmark
+   */
+  showBenchmarkUI(): void {
+    if (!this.initialized || !this.benchmarkUI) return;
+    
+    this.benchmarkUI.show();
+    
+    this.eventEmitter.emit(UIEventType.BENCHMARK_OPENED, {
+      timestamp: Date.now()
+    });
+  }
+  
+  /**
+   * Esconde a interface de benchmark
+   */
+  hideBenchmarkUI(): void {
+    if (!this.initialized || !this.benchmarkUI) return;
+    
+    this.benchmarkUI.hide();
+    
+    this.eventEmitter.emit(UIEventType.BENCHMARK_CLOSED, {
+      timestamp: Date.now()
+    });
+  }
+  
+  /**
+   * Alterna a visibilidade da interface de benchmark
+   */
+  toggleBenchmarkUI(): void {
+    if (!this.initialized || !this.benchmarkUI) return;
+    
+    this.benchmarkUI.toggle();
+  }
+  
+  /**
+   * Define o callback do botão de benchmark
+   * @param callback Função a ser chamada quando o botão for clicado
+   */
+  setBenchmarkButtonCallback(callback: () => void): void {
+    if (!this.initialized) return;
+    
+    this.gameUI.setBenchmarkCallback(() => {
+      callback();
+      
+      this.eventEmitter.emit(UIEventType.BUTTON_CLICKED, {
+        button: 'benchmark_button'
+      });
+    });
+  }
+  
+  /**
    * Libera recursos do coordenador de UI
    */
   dispose(): void {
     if (!this.initialized) return;
     
-    this.uiSystem.clear();
-    this.eventEmitter.removeAllListeners();
-    
-    this.initialized = false;
+    if (this.uiSystem) {
+      // Remove listeners e limpa eventos
+      this.eventEmitter.removeAllListeners();
+      
+      // Libera recursos das interfaces
+      if (this.benchmarkUI) {
+        this.benchmarkUI.destroy();
+      }
+      
+      // Libera recursos existentes
+      this.gameUI.clear();
+      this.initialized = false;
+    }
   }
 } 

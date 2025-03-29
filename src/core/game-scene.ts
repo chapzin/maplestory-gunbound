@@ -295,6 +295,11 @@ export class GameScene extends BaseScene {
       // Iniciar o jogo através do controlador de lógica
       this.logicController.startGame();
       
+      // Configurar o callback do botão de benchmark para abrir a interface de benchmark
+      this.uiCoordinator.setBenchmarkButtonCallback(() => {
+        this.uiCoordinator.toggleBenchmarkUI();
+      });
+      
       // Agora que todos os sistemas foram inicializados e o jogo começou,
       // podemos reproduzir a música de fundo
       this.audioController.playMusic(BackgroundMusic.MAIN_THEME, 0.5);

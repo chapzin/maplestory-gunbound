@@ -68,6 +68,18 @@ export class GameUI {
     );
     endTurnButton.setVisible(false);
     this.uiSystem.addElement(endTurnButton);
+    
+    // Cria o botão de benchmark
+    const benchmarkButton = new ButtonElement(
+      'benchmarkButton',
+      'Benchmark',
+      this.screenWidth - 100,
+      this.screenHeight - 40,
+      90,
+      30,
+      () => {} // O callback será definido externamente
+    );
+    this.uiSystem.addElement(benchmarkButton);
   }
 
   /**
@@ -288,6 +300,33 @@ export class GameUI {
       if (!baseElementIds.includes(id)) {
         this.uiSystem.removeElement(id);
       }
+    }
+  }
+
+  /**
+   * Define o callback do botão de benchmark
+   * @param callback Função a ser chamada quando o botão for clicado
+   */
+  setBenchmarkCallback(callback: () => void): void {
+    const benchmarkButton = this.uiSystem.getElement<ButtonElement>('benchmarkButton');
+    if (benchmarkButton) {
+      // Substitui o elemento atual por um novo com o mesmo ID mas callback diferente
+      const position = benchmarkButton.displayObject.position;
+      const visible = benchmarkButton.visible;
+      
+      this.uiSystem.removeElement('benchmarkButton');
+      
+      const newButton = new ButtonElement(
+        'benchmarkButton',
+        'Benchmark',
+        position.x,
+        position.y,
+        90,
+        30,
+        callback
+      );
+      newButton.setVisible(visible);
+      this.uiSystem.addElement(newButton);
     }
   }
 } 
