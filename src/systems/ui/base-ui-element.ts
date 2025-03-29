@@ -30,6 +30,34 @@ export abstract class BaseUIElement implements UIElement {
   }
   
   /**
+   * Verifica se o elemento está visível
+   * @returns Estado de visibilidade
+   */
+  isVisible(): boolean {
+    return this.visible;
+  }
+  
+  /**
+   * Define a posição do elemento
+   * @param x Posição X
+   * @param y Posição Y
+   */
+  setPosition(x: number, y: number): void {
+    this.displayObject.position.set(x, y);
+  }
+  
+  /**
+   * Obtém a posição atual do elemento
+   * @returns Objeto com coordenadas x e y
+   */
+  getPosition(): { x: number, y: number } {
+    return { 
+      x: this.displayObject.position.x,
+      y: this.displayObject.position.y
+    };
+  }
+  
+  /**
    * Atualiza o elemento
    * @param delta Delta time
    * @param args Argumentos adicionais

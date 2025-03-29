@@ -28,13 +28,21 @@ export interface ProjectileOptions {
   weaponType: WeaponType;   // Tipo de arma que disparou o projétil
   physicsSystem: PhysicsSystem;
   
+  // Identificação do projétil
+  sourceId?: number;        // ID da entidade que disparou o projétil
+  playerId?: number;        // ID do jogador que controla a entidade
+  
   // Opções específicas para projéteis de fragmentação
   fragmentCount?: number;
   fragmentDamage?: number;
+  fragmentSpread?: number;  // Dispersão dos fragmentos
+  explosionRadius?: number; // Raio da explosão
   
   // Opções específicas para projéteis guiados
   guidanceStrength?: number;
   target?: any;
+  targetX?: number;         // Coordenada X do alvo
+  targetY?: number;         // Coordenada Y do alvo
 }
 
 /**

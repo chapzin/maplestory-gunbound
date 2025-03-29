@@ -30,6 +30,16 @@ export class TerrainSystem {
   }
   
   /**
+   * Atualiza o sistema de terreno
+   * @param deltaTime Delta time em segundos
+   */
+  update(deltaTime: number): void {
+    // O sistema de terreno atual não precisa de atualizações por frame
+    // Este método existe para compatibilidade com a interface esperada
+    // Se no futuro o terreno precisar de atualizações contínuas, a lógica será adicionada aqui
+  }
+  
+  /**
    * Gera um novo terreno
    */
   generate(): void {
